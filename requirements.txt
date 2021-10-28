@@ -1,0 +1,17 @@
+alembic==1.7.3
+anyio==3.3.4
+fastapi==0.70.0
+greenlet==1.1.1
+idna==3.3
+importlib-metadata==4.8.1
+importlib-resources==5.2.2
+Mako==1.1.5
+MarkupSafe==2.0.1
+mysqlclient @ file:///D:/Himanshu/College/Sem%207/Final%20Project/mysqlclient-1.4.6-cp37-cp37m-win32.whl
+pydantic==1.8.2
+python-dotenv==0.19.1
+sniffio==1.2.0
+SQLAlchemy==1.4.25
+starlette==0.16.0
+typing-extensions==3.10.0.2
+zipp==3.5.0
