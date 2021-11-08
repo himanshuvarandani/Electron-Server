@@ -1,6 +1,9 @@
 import re
+import hashlib
 from app import app
-from fastapi import Response
+from app.database import db
+from app.database.models.teachers import Teachers
+from fastapi import Response, status
 from pydantic import BaseModel, validator
 
 class RequestBody(BaseModel):
@@ -12,15 +15,17 @@ class RequestBody(BaseModel):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
     if not re.fullmatch(regex, v):
-      raise ValueError
+      raise TypeError("Invalid Email")
     return v
 
 @app.post("/teacher/login")
 async def teacher_login(body: RequestBody, response: Response):
   email = body.email
-  password = body.password
+  password = hashlib.sha256(str.encode(body.password)).hexdigest()
+
+  result = db.query(Teachers).filter_by(email=email, password_hash=password).first()
+  if result is None:
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {"result": "fail", "reason": "Incorrect credentials"}
   
-  if email == "test@gmail.com" and password == "pass":
-    return {"token": "4hbjn434jb234vjb"}
-  
-  return {}
+  return {"result": "ok"}
