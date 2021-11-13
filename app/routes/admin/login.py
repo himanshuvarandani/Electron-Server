@@ -6,6 +6,7 @@ from app.database.models.admin import Admin
 from fastapi import Response, status
 from pydantic import BaseModel, validator
 
+
 class RequestBody(BaseModel):
   email: str
   password: str
@@ -17,6 +18,7 @@ class RequestBody(BaseModel):
     if not re.fullmatch(regex, v):
       raise TypeError("Invalid Email")
     return v
+
 
 @app.post("/admin/login")
 async def admin_login(body: RequestBody, response: Response):
