@@ -1,2 +1,1 @@
-from app.routes.student import login
-from app.routes.student import subjects
+from app.routes.student import (login, subjects)

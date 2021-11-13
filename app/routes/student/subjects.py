@@ -5,7 +5,7 @@ from app.database.models.subjects import Subjects
 from fastapi import Response, status
 
 
-@app.get("/student/{student_id}/subjects")
+@app.get("/students/{student_id}/subjects")
 async def student_subjects(student_id, response: Response):
   subjects = db.query(Subjects).join(StudentSubjectMap, StudentSubjectMap.student_id==student_id).filter(Subjects.id==StudentSubjectMap.subject_id).all()
   
