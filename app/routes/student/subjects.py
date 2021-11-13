@@ -1,6 +1,5 @@
 from app import app
 from app.database import db
-from app.database.models.students import Students
 from app.database.models.student_subject_map import StudentSubjectMap
 from app.database.models.subjects import Subjects
 from fastapi import Response, status
