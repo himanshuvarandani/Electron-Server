@@ -1,6 +1,12 @@
-from app.database.models import admin
-from app.database.models import classes
-from app.database.models import students
-from app.database.models import subjects
-from app.database.models import teachers
+from app.database.models import (
+  admin,
+  classes,
+  students,
+  subjects,
+  teachers,
+  student_subject_map,
+  subject_class_map,
+  teacher_class_map,
+  teacher_subject_map
+)
 from app.database.models.base import Base

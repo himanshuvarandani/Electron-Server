@@ -7,4 +7,3 @@ class Subjects(Base):
   __tablename__ = "subjects"
   id = Column(Integer, primary_key=True)
   name = Column(String(30))
-  class_id = Column(Integer, ForeignKey(Classes.id))
