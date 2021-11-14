@@ -5,7 +5,7 @@ from app.database.models.teachers import Teachers
 
 
 class TeacherSubjectMap(Base):
-  __tablename__ = "teacher_subject_map"
-  id = Column(Integer, primary_key=True)
-  teacher_id = Column(Integer, ForeignKey(Teachers.id))
-  subject_id = Column(Integer, ForeignKey(Subjects.id))
+    __tablename__ = "teacher_subject_map"
+    id = Column(Integer, primary_key=True)
+    teacher_id = Column(Integer, ForeignKey(Teachers.id))
+    subject_id = Column(Integer, ForeignKey(Subjects.id))

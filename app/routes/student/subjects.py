@@ -7,10 +7,15 @@ from fastapi import Response, status
 
 @app.get("/students/{student_id}/subjects")
 async def student_subjects(student_id, response: Response):
-  subjects = db.query(Subjects).join(StudentSubjectMap, StudentSubjectMap.student_id==student_id).filter(Subjects.id==StudentSubjectMap.subject_id).all()
-  
-  if not subjects:
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"result": "fail", "reason": "No subjects found"}
+    subjects = (
+        db.query(Subjects)
+        .join(StudentSubjectMap, StudentSubjectMap.student_id == student_id)
+        .filter(Subjects.id == StudentSubjectMap.subject_id)
+        .all()
+    )
 
-  return subjects
+    if not subjects:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"result": "fail", "reason": "No subjects found"}
+
+    return subjects
