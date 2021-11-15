@@ -9,6 +9,6 @@ from app.database.models import (
     subject_class_map,
     teacher_class_map,
     teacher_subject_map,
-    timetable
+    timetable,
 )
 from app.database.models.base import Base

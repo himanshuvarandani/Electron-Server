@@ -18,9 +18,7 @@ class RequestBody(BaseModel):
 @app.get("/subjects/{subject_id}/announcements")
 async def get_subject_announcements(subject_id, response: Response):
     announcements = (
-        db.query(Announcements)
-        .filter(Announcements.subject_id == subject_id)
-        .all()
+        db.query(Announcements).filter(Announcements.subject_id == subject_id).all()
     )
 
     if not announcements:

@@ -7,11 +7,7 @@ from fastapi import Response, status
 
 @app.get("/classes/{class_id}/students")
 async def class_students(class_id, response: Response):
-    students = (
-        db.query(Students)
-        .filter(Students.class_id == class_id)
-        .all()
-    )
+    students = db.query(Students).filter(Students.class_id == class_id).all()
 
     if not students:
         response.status_code = status.HTTP_404_NOT_FOUND

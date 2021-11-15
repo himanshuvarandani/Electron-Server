@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: Lint with black
+        language: python
+        files: '/.*.py$/'
+        entry: black --check app/
+        always_run: true

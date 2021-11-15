@@ -8,11 +8,7 @@ from fastapi import Response, status
 
 @app.get("/classes/{class_id}/timetable")
 async def class_timetable(class_id, response: Response):
-    timetable = (
-        db.query(Timetable)
-        .filter(Timetable.class_id == class_id)
-        .all()
-    )
+    timetable = db.query(Timetable).filter(Timetable.class_id == class_id).all()
 
     if not timetable:
         response.status_code = status.HTTP_404_NOT_FOUND
