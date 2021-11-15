@@ -1,5 +1,6 @@
 from app.database.models import (
     admin,
+    announcements,
     classes,
     students,
     subjects,
@@ -8,5 +9,6 @@ from app.database.models import (
     subject_class_map,
     teacher_class_map,
     teacher_subject_map,
+    timetable
 )
 from app.database.models.base import Base
