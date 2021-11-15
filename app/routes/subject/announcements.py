@@ -1,10 +1,11 @@
 from app import app
 from app.database import db
 from app.database.models.announcements import Announcements
-from app.database.models.subjects import Subjects
 from app.database.models.subject_class_map import SubjectClassMap
+from app.database.models.subjects import Subjects
 from app.database.models.teacher_subject_map import TeacherSubjectMap
-from fastapi import Response, status
+from fastapi import Depends, Response, status
+from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 
 
@@ -16,7 +17,11 @@ class RequestBody(BaseModel):
 
 
 @app.get("/subjects/{subject_id}/announcements")
-async def get_subject_announcements(subject_id, response: Response):
+async def get_subject_announcements(
+    subject_id, response: Response, Auth: AuthJWT = Depends()
+):
+    Auth.jwt_required()
+
     announcements = (
         db.query(Announcements).filter(Announcements.subject_id == subject_id).all()
     )
@@ -30,7 +35,11 @@ async def get_subject_announcements(subject_id, response: Response):
 
 # Only allow teachers to post announcements
 @app.post("/subjects/{subject_id}/announcements")
-async def post_subject_announcements(subject_id, body: RequestBody, response: Response):
+async def post_subject_announcements(
+    subject_id, body: RequestBody, response: Response, Auth: AuthJWT = Depends()
+):
+    Auth.jwt_required()
+
     existing = (
         db.query(TeacherSubjectMap)
         .filter(TeacherSubjectMap.subject_id == body.subject_id)

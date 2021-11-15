@@ -3,11 +3,14 @@ from app.database import db
 from app.database.models.student_subject_map import StudentSubjectMap
 from app.database.models.subjects import Subjects
 from app.database.models.timetable import Timetable
-from fastapi import Response, status
+from fastapi import Depends, Response, status
+from fastapi_jwt_auth import AuthJWT
 
 
 @app.get("/students/{student_id}/timetable")
-async def student_timetable(student_id, response: Response):
+async def student_timetable(student_id, response: Response, Auth: AuthJWT = Depends()):
+    Auth.jwt_required()
+
     timetable = (
         db.query(Timetable)
         .join(StudentSubjectMap, StudentSubjectMap.student_id == student_id)

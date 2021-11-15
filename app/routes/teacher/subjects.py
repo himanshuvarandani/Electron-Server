@@ -1,13 +1,18 @@
 from app import app
 from app.database import db
-from app.database.models.subjects import Subjects
 from app.database.models.subject_class_map import SubjectClassMap
+from app.database.models.subjects import Subjects
 from app.database.models.teacher_subject_map import TeacherSubjectMap
-from fastapi import Response, status
+from fastapi import Depends, Response, status
+from fastapi_jwt_auth import AuthJWT
 
 
 @app.get("/teachers/{teacher_id}/list-class-subjects")
-async def teacher_class_subjects(teacher_id, class_id: int, response: Response):
+async def teacher_class_subjects(
+    teacher_id, class_id: int, response: Response, Auth: AuthJWT = Depends()
+):
+    Auth.jwt_required()
+
     subjects = (
         db.query(Subjects)
         .join(TeacherSubjectMap, TeacherSubjectMap.teacher_id == teacher_id)
