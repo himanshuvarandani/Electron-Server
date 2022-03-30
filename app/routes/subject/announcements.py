@@ -42,7 +42,7 @@ async def post_subject_announcements(
 
     existing = (
         db.query(TeacherSubjectMap)
-        .filter(TeacherSubjectMap.subject_id == body.subject_id)
+        .filter(TeacherSubjectMap.subject_id == subject_id)
         .filter(TeacherSubjectMap.teacher_id == body.teacher_id)
         .first()
     )
@@ -54,7 +54,7 @@ async def post_subject_announcements(
     announcement = Announcements()
     announcement.title = body.title
     announcement.body = body.body
-    announcement.subject_id = body.subject_id
+    announcement.subject_id = subject_id
     announcement.teacher_id = body.teacher_id
 
     try:

@@ -9,6 +9,6 @@ class Calendar(Base):
     __tablename__ = "calendar"
     id = Column(Integer, primary_key=True)
     subject_id = Column(Integer, ForeignKey(Subjects.id))
-    class_id = Column(Integer, ForeignKey(Classes.id))
+    class_id = Column(String(30), ForeignKey(Classes.name))
     deadline = Column(DateTime)
     task = Column(String(200))

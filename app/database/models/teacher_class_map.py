@@ -8,4 +8,4 @@ class TeacherClassMap(Base):
     __tablename__ = "teacher_class_map"
     id = Column(Integer, primary_key=True)
     teacher_id = Column(Integer, ForeignKey(Teachers.id))
-    class_id = Column(Integer, ForeignKey(Classes.id))
+    class_id = Column(String(30), ForeignKey(Classes.name))

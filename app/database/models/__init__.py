@@ -1,6 +1,7 @@
 from app.database.models import (
     admin,
     announcements,
+    calendar,
     classes,
     students,
     subjects,
