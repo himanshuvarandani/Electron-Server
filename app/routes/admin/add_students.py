@@ -1,10 +1,11 @@
-import random
 import pandas as pd
+import uuid
 
 from app import app
 from app.database.models.students import Students
 from fastapi import Response, UploadFile, File
 from pydantic import BaseModel, validator
+from werkzeug.security import generate_password_hash
 
 
 @app.post("/admin/add_students")
@@ -20,20 +21,14 @@ async def add_students(file: bytes = File(...)):
       studentInstance.class_id = studentDetail[2]
 
       # Generate a random password
-      charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      password = ''
-      for i in range(8):
-        password += random.choice(charset)
-      
-      # Todo: Required hashing password
-      studentInstance.password_hash = password
-      
-      # Todo: Remove these comments:
-      # try:
-      #   db.add(studentInstance)
-      #   db.commit()
-      # except Exception as e:
-      #   print(e)
+      password = uuid.uuid4().hex[:12]
+      studentInstance.password_hash = generate_password_hash(password)
+
+      try:
+        db.add(studentInstance)
+        db.commit()
+      except Exception as e:
+        print(e)
 
     return {"result": 'Pass'}
   except Exception as e:
