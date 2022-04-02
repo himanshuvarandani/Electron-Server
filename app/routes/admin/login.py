@@ -1,10 +1,12 @@
 import re
-import hashlib
+
 from app import app
 from app.database import db
 from app.database.models.admin import Admin
-from fastapi import Response, status
+from fastapi import Depends, Response, status
+from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel, validator
+from werkzeug.security import check_password_hash
 
 
 class RequestBody(BaseModel):
@@ -21,13 +23,17 @@ class RequestBody(BaseModel):
 
 
 @app.post("/admin/login")
-async def admin_login(body: RequestBody, response: Response):
-    email = body.email
-    password = hashlib.sha256(str.encode(body.password)).hexdigest()
-
-    result = db.query(Admin).filter_by(email=email, password_hash=password).first()
-    if result is None:
+async def admin_login(body: RequestBody, response: Response, Auth: AuthJWT = Depends()):
+    result = db.query(Admin).filter_by(email=body.email).first()
+    if not result:
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"result": "fail", "reason": "Incorrect credentials"}
 
-    return {"result": "ok"}
+    if not check_password_hash(result.password_hash, body.password):
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"result": "fail", "reason": "Incorrect credentials"}
+
+    token = Auth.create_access_token(
+        subject=result.id, user_claims={"role": "admin"}, expires_time=False
+    )
+    return {"access_token": token}

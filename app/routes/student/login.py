@@ -1,4 +1,3 @@
-import hashlib
 import re
 
 from app import app
@@ -7,6 +6,7 @@ from app.database.models.students import Students
 from fastapi import Depends, Response, status
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel, validator
+from werkzeug.security import check_password_hash
 
 
 class RequestBody(BaseModel):
@@ -26,11 +26,12 @@ class RequestBody(BaseModel):
 async def students_login(
     body: RequestBody, response: Response, Auth: AuthJWT = Depends()
 ):
-    email = body.email
-    password = hashlib.sha256(str.encode(body.password)).hexdigest()
-
-    result = db.query(Students).filter_by(email=email, password_hash=password).first()
+    result = db.query(Students).filter_by(email=body.email).first()
     if not result:
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"result": "fail", "reason": "Incorrect credentials"}
+
+    if not check_password_hash(result.password_hash, body.password):
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"result": "fail", "reason": "Incorrect credentials"}
 

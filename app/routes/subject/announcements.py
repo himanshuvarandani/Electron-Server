@@ -1,8 +1,6 @@
 from app import app
 from app.database import db
 from app.database.models.announcements import Announcements
-from app.database.models.subject_class_map import SubjectClassMap
-from app.database.models.subjects import Subjects
 from app.database.models.teacher_subject_map import TeacherSubjectMap
 from fastapi import Depends, Response, status
 from fastapi_jwt_auth import AuthJWT
@@ -42,7 +40,7 @@ async def post_subject_announcements(
 
     existing = (
         db.query(TeacherSubjectMap)
-        .filter(TeacherSubjectMap.subject_id == body.subject_id)
+        .filter(TeacherSubjectMap.subject_id == subject_id)
         .filter(TeacherSubjectMap.teacher_id == body.teacher_id)
         .first()
     )
@@ -54,7 +52,7 @@ async def post_subject_announcements(
     announcement = Announcements()
     announcement.title = body.title
     announcement.body = body.body
-    announcement.subject_id = body.subject_id
+    announcement.subject_id = subject_id
     announcement.teacher_id = body.teacher_id
 
     try:
