@@ -4,6 +4,7 @@ from app.database.models import (
     assignments,
     calendar,
     classes,
+    marks,
     students,
     subjects,
     teachers,
