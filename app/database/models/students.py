@@ -8,5 +8,5 @@ class Students(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(30))
     email = Column(String(30), unique=True)
-    class_id = Column(String(30), ForeignKey(Classes.name))
+    class_id = Column(Integer, ForeignKey(Classes.id))
     password_hash = Column(String(512))

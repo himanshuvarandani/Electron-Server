@@ -8,4 +8,4 @@ class SubjectClassMap(Base):
     __tablename__ = "subject_class_map"
     id = Column(Integer, primary_key=True)
     subject_id = Column(Integer, ForeignKey(Subjects.id))
-    class_id = Column(String(30), ForeignKey(Classes.name))
+    class_id = Column(Integer, ForeignKey(Classes.id))
