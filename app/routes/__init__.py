@@ -1,1 +1,1 @@
-from app.routes import admin, classes, student, subject, teacher
+from app.routes import admin, classes, student, subject, teacher, stats
