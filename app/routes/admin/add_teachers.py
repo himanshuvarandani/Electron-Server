@@ -1,9 +1,9 @@
-import pandas as pd
 import uuid
 
+import pandas as pd
 from app import app
 from app.database.models.teachers import Teachers
-from fastapi import Response, UploadFile, File
+from fastapi import File, Response, UploadFile
 from pydantic import BaseModel, validator
 from werkzeug.security import generate_password_hash
 
@@ -19,7 +19,6 @@ async def add_teachers(file: bytes = File(...)):
             teacherInstance.name = teacherDetail[0]
             teacherInstance.email = teacherDetail[1]
 
-            # Generate a random password
             # Generate a random password
             password = uuid.uuid4().hex[:12]
             teacherInstance.password_hash = generate_password_hash(password)

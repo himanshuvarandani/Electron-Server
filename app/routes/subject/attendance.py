@@ -20,9 +20,9 @@ async def update_student_attendance(
 
     existing = (
         db.query(StudentSubjectMap)
-            .filter(StudentSubjectMap.subject_id == subject_id)
-            .filter(StudentSubjectMap.student_id == body.student_id)
-            .first()
+        .filter(StudentSubjectMap.subject_id == subject_id)
+        .filter(StudentSubjectMap.student_id == body.student_id)
+        .first()
     )
 
     if not existing:
@@ -50,9 +50,7 @@ async def get_subject_attendance(
 ):
     Auth.jwt_required()
 
-    attendance = (
-        db.query(Attendance).filter(Attendance.subject_id == subject_id).all()
-    )
+    attendance = db.query(Attendance).filter(Attendance.subject_id == subject_id).all()
 
     if not attendance:
         response.status_code = status.HTTP_404_NOT_FOUND
@@ -67,9 +65,7 @@ async def get_subject_attendance(
 ):
     Auth.jwt_required()
 
-    attendance = (
-        db.query(Attendance).filter(Attendance.student_id == student_id).all()
-    )
+    attendance = db.query(Attendance).filter(Attendance.student_id == student_id).all()
 
     if not attendance:
         response.status_code = status.HTTP_404_NOT_FOUND
