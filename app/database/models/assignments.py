@@ -11,6 +11,7 @@ class Assignments(Base):
     title = Column(String(30))
     body = Column(String(120))
     attachement = Column(String(300))
+    max_marks = Column(Integer)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     end_date = Column(DateTime(timezone=True))
     subject_id = Column(Integer, ForeignKey(Subjects.id))
