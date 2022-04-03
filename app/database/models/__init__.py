@@ -2,6 +2,7 @@ from app.database.models import (
     admin,
     announcements,
     assignments,
+    attendance,
     calendar,
     classes,
     marks,

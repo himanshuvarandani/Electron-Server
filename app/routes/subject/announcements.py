@@ -10,7 +10,6 @@ from pydantic import BaseModel
 class RequestBody(BaseModel):
     title: str
     body: str
-    subject_id: int
     teacher_id: int
 
 
