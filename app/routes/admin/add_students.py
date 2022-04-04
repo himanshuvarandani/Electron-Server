@@ -4,14 +4,18 @@ import uuid
 from app import app
 from app.database import db
 from app.database.models.students import Students
-from fastapi import Response, UploadFile, File
+from fastapi import Depends, File, Response
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, validator
+from fastapi_jwt_auth import AuthJWT
 from werkzeug.security import generate_password_hash
 
 
 @app.post("/admin/add_students")
-async def add_students(file: bytes = File(...)):
+async def add_students(
+    response: Response, Auth: AuthJWT = Depends(), file: bytes = File(...)
+):
+    Auth.jwt_required()
+    
     try:
         dataFrame = pd.read_excel(file, index_col=None)
         students = dataFrame.values.tolist()

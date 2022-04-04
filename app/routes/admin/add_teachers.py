@@ -1,17 +1,21 @@
+import pandas as pd
 import uuid
 
-import pandas as pd
 from app import app
 from app.database import db
 from app.database.models.teachers import Teachers
-from fastapi import File, Response, UploadFile
+from fastapi import Depends, File, Response
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, validator
+from fastapi_jwt_auth import AuthJWT
 from werkzeug.security import generate_password_hash
 
 
 @app.post("/admin/add_teachers")
-async def add_teachers(file: bytes = File(...)):
+async def add_teachers(
+    response: Response, Auth: AuthJWT = Depends(), file: bytes = File(...)
+):
+    Auth.jwt_required()
+    
     try:
         dataFrame = pd.read_excel(file, index_col=None)
         teachers = dataFrame.values.tolist()
