@@ -21,7 +21,7 @@ class AssignmentRequestBody(BaseModel):
 
 
 class MarksRequestBody(BaseModel):
-    marks: number
+    marks: int
     subject_id: int
     teacher_id: int
 

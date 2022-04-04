@@ -2,6 +2,7 @@ import random
 import pandas as pd
 
 from app import app
+from app.database import db
 from app.database.models.subjects import Subjects
 from fastapi import Response, UploadFile, File
 from pydantic import BaseModel, validator
