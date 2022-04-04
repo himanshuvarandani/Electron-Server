@@ -16,7 +16,7 @@ class AssignmentRequestBody(BaseModel):
     body: str
     attachement: str
     end_date: str
-    subject_id: int
+    max_marks: int
     teacher_id: int
 
 
@@ -69,6 +69,7 @@ async def post_subject_assignments(
     assignment.body = body.body
     assignment.attachement = body.attachement
     assignment.end_date = body.end_date
+    assignment.max_marks = body.max_marks
     assignment.subject_id = subject_id
     assignment.teacher_id = body.teacher_id
 
@@ -92,7 +93,7 @@ async def post_subject_assignments(
 
         db.commit()
     except Exception as e:
-        response.status_code = status.HTTP_503_UNAVAILABLE
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"result": "fail", "reason": str(e)}
 
     return {"result": "ok"}
@@ -130,7 +131,7 @@ async def update_assignment_marks(
         db.add(marks)
         db.commit()
     except Exception as e:
-        response.status_code = status.HTTP_503_UNAVAILABLE
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"result": "fail", "reason": str(e)}
 
     return {"result": "ok"}
