@@ -22,7 +22,7 @@ class AssignmentRequestBody(BaseModel):
 
 class MarksRequestBody(BaseModel):
     marks: int
-    subject_id: int
+    student_id: int
     teacher_id: int
 
 
@@ -120,20 +120,9 @@ async def update_assignment_marks(
 ):
     Auth.jwt_required()
 
-    existing = (
-        db.query(TeacherSubjectMap)
-        .filter(TeacherSubjectMap.subject_id == subject_id)
-        .filter(TeacherSubjectMap.teacher_id == body.teacher_id)
-        .first()
-    )
-
-    if not existing:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "Teacher not available in given class"}
-
     marks = Marks()
     marks.marks = body.marks
-    marks.subject_id = body.subject_id
+    marks.student_id = body.student_id
     marks.teacher_id = body.teacher_id
     marks.assignment_id = assignment_id
 
