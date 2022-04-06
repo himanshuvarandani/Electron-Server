@@ -1,1 +1,1 @@
-from app.routes.subject import announcements, assignments, attendance
+from app.routes.subject import announcements, assignments, attendance, details
