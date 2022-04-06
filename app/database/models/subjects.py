@@ -6,4 +6,5 @@ from app.database.models.classes import Classes
 class Subjects(Base):
     __tablename__ = "subjects"
     id = Column(Integer, primary_key=True)
-    name = Column(String(30))
+    code = Column(String(30))
+    name = Column(String(100))
