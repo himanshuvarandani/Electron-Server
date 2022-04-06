@@ -5,14 +5,14 @@ from app.database.models import (
     attendance,
     calendar,
     classes,
-    marks,
     students,
     subjects,
-    teachers,
+    submissions,
     student_subject_map,
     subject_class_map,
     teacher_class_map,
     teacher_subject_map,
+    teachers,
     timetable,
 )
 from app.database.models.base import Base

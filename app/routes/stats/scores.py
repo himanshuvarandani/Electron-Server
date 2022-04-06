@@ -3,7 +3,7 @@ import pickle
 
 from app import app
 from app.database import db
-from app.database.models.marks import Marks
+from app.database.models.submissions import Submissions
 from app.database.models.assignments import Assignments
 from starlette import status
 from starlette.requests import Request
@@ -19,10 +19,10 @@ async def predict_score(student_id: int, subject_id: int, resp: Response):
         return {"result": "Could not load model for prediction"}
 
     marks = (
-      db.query(Marks.marks, Assignments.max_marks)
+      db.query(Submissions.marks, Assignments.max_marks)
           .filter(Assignments.subject_id == subject_id)
-          .filter(Marks.student_id == student_id)
-          .filter(Marks.assignment_id == Assignments.id)
+          .filter(Submissions.student_id == student_id)
+          .filter(Submissions.assignment_id == Assignments.id)
           .all()
     )
 

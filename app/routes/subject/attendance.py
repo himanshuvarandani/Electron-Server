@@ -60,7 +60,7 @@ async def get_subject_attendance(
 
 
 @app.get("/students/{student_id}/attendance")
-async def get_subject_attendance(
+async def get_student_attendance(
     student_id, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()

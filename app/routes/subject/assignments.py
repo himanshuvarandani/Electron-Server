@@ -2,8 +2,8 @@ from app import app
 from app.database import db
 from app.database.models.assignments import Assignments
 from app.database.models.calendar import Calendar
-from app.database.models.marks import Marks
 from app.database.models.subject_class_map import SubjectClassMap
+from app.database.models.submissions import Submissions
 from app.database.models.subjects import Subjects
 from app.database.models.teacher_subject_map import TeacherSubjectMap
 from fastapi import Depends, Response, status
@@ -20,7 +20,7 @@ class AssignmentRequestBody(BaseModel):
     teacher_id: int
 
 
-class MarksRequestBody(BaseModel):
+class SubmissionsRequestBody(BaseModel):
     marks: int
     student_id: int
     teacher_id: int
@@ -44,8 +44,8 @@ async def get_subject_assignments(
 
 
 # Only allow teachers to post assignments
-@app.post("/subjects/{subject_id}/assignments")
-async def post_subject_assignments(
+@app.post("/subjects/{subject_id}/assignment")
+async def post_subject_assignment(
     subject_id,
     body: AssignmentRequestBody,
     response: Response,
@@ -117,18 +117,15 @@ async def get_assignment_details(
 # Only allow teachers to give marks
 @app.post("/assignments/{assignment_id}/update-marks")
 async def update_assignment_marks(
-    assignment_id, body: MarksRequestBody, response: Response, Auth: AuthJWT = Depends()
+    assignment_id, body: SubmissionsRequestBody, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()
 
-    marks = Marks()
-    marks.marks = body.marks
-    marks.student_id = body.student_id
-    marks.teacher_id = body.teacher_id
-    marks.assignment_id = assignment_id
-
     try:
-        db.add(marks)
+        db.query(Submissions) \
+            .filter(Submissions.student_id == body.student_id) \
+            .filter(Submissions.assignment_id == body.assignment_id) \
+            .update({ 'marks': body.marks, 'teacher_id': body.teacher_id })
         db.commit()
     except Exception as e:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -137,12 +134,17 @@ async def update_assignment_marks(
     return {"result": "ok"}
 
 
-@app.get("/assignments/{assignment_id}/get-marks")
-async def get_assignment_marks(
+# to get all submissions of an assignment for teacher
+@app.get("/assignments/{assignment_id}/submissions")
+async def get_assignment_details(
     assignment_id, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()
 
-    marks = db.query(Marks).filter(Marks.assignment_id == assignment_id).all()
+    assignments = db.query(Submissions).filter(Submissions.assignment_id == assignment_id).all()
 
-    return marks
+    if not assignments:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"result": "fail", "reason": "No assignment found"}
+
+    return assignments
