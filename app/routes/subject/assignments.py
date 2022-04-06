@@ -73,24 +73,14 @@ async def post_subject_assignment(
     assignment.subject_id = subject_id
     assignment.teacher_id = body.teacher_id
 
+    calendar = Calendar()
+    calendar.deadline = body.end_date
+    calendar.task = "Assignment " + body.title
+    calendar.subject_id = subject_id
+
     try:
         db.add(assignment)
-
-        classes = (
-            db.query(SubjectClassMap)
-            .filter(SubjectClassMap.subject_id == subject_id)
-            .all()
-        )
-
-        for class1 in classes:
-            calendar = Calendar()
-            calendar.deadline = body.end_date
-            calendar.task = "Assignment " + body.title
-            calendar.subject_id = subject_id
-            calendar.class_id = class1.class_id
-
-            db.add(calendar)
-
+        db.add(calendar)
         db.commit()
     except Exception as e:
         response.status_code = status.HTTP_400_BAD_REQUEST

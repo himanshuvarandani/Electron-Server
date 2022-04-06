@@ -4,9 +4,10 @@ from app.database.models.teacher_subject_map import TeacherSubjectMap
 from app.database.models.timetable import Timetable
 from fastapi import Depends, Response, status
 from fastapi_jwt_auth import AuthJWT
+from pydantic import BaseModel
 
 
-class RequestBody:
+class RequestBody(BaseModel):
     meeting_link: str
 
 

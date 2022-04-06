@@ -9,7 +9,12 @@ from fastapi_jwt_auth import AuthJWT
 async def class_timetable(class_id, response: Response, Auth: AuthJWT = Depends()):
     Auth.jwt_required()
 
-    calendar = db.query(Calendar).filter(Calendar.class_id == class_id).all()
+    calendar = (
+        db.query(Calendar)
+            .join(SubjectClassMap, SubjectClassMap.class_id == class_id)
+            .filter(Calendar.subject_id == SubjectClassMap.subject_id)
+            .all()
+    )
 
     if not calendar:
         response.status_code = status.HTTP_404_NOT_FOUND
