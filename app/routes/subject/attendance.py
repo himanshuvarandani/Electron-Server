@@ -8,7 +8,6 @@ from pydantic import BaseModel
 
 
 class RequestBody(BaseModel):
-    attendance: str
     student_id: int
 
 
@@ -20,22 +19,32 @@ async def update_student_attendance(
 
     existing = (
         db.query(StudentSubjectMap)
-        .filter(StudentSubjectMap.subject_id == subject_id)
-        .filter(StudentSubjectMap.student_id == body.student_id)
-        .first()
+            .filter(StudentSubjectMap.subject_id == subject_id)
+            .filter(StudentSubjectMap.student_id == body.student_id)
+            .first()
     )
 
     if not existing:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"result": "fail", "reason": "Student not available in given subject"}
 
-    attendance = Attendance()
-    attendance.attendance = body.attendance
-    attendance.subject_id = subject_id
-    attendance.student_id = body.student_id
+    attendance = (
+        db.query(Attendance)
+            .filter(Attendance.subject_id == subject_id)
+            .filter(Attendance.student_id == body.student_id)
+            .first()
+    )
 
     try:
-        db.add(attendance)
+        if (attendance):
+            attendance.attendance += 1
+        else:
+            attendance = Attendance()
+            attendance.attendance = 1
+            attendance.subject_id = subject_id
+            attendance.student_id = body.student_id
+            
+            db.add(attendance)
         db.commit()
     except Exception as e:
         response.status_code = status.HTTP_503_UNAVAILABLE
