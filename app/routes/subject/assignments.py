@@ -36,10 +36,6 @@ async def get_subject_assignments(
         db.query(Assignments).filter(Assignments.subject_id == subject_id).all()
     )
 
-    if not assignments:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No assignments found"}
-
     return assignments
 
 
@@ -97,10 +93,6 @@ async def get_assignment_details(
 
     assignment = db.query(Assignments).filter(Assignments.id == assignment_id).first()
 
-    if not assignment:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No assignment found"}
-
     return assignment
 
 
@@ -126,15 +118,28 @@ async def update_assignment_marks(
 
 # to get all submissions of an assignment for teacher
 @app.get("/assignments/{assignment_id}/submissions")
-async def get_assignment_details(
+async def get_assignment_submissions(
     assignment_id, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()
 
     assignments = db.query(Submissions).filter(Submissions.assignment_id == assignment_id).all()
 
-    if not assignments:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No assignment found"}
-
     return assignments
+
+
+# to get marks of a student for specific assignment
+@app.get("/assignments/{assignment_id}/submission")
+async def get_assignment_submission(
+    assignment_id, student_id: int, response: Response, Auth: AuthJWT = Depends()
+):
+    Auth.jwt_required()
+
+    submission = (
+        db.query(Submissions)
+            .filter(Submissions.assignment_id == assignment_id)
+            .filter(Submissions.student_id == student_id)
+            .first()
+    )
+
+    return submission

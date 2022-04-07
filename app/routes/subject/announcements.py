@@ -23,10 +23,6 @@ async def get_subject_announcements(
         db.query(Announcements).filter(Announcements.subject_id == subject_id).all()
     )
 
-    if not announcements:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No announcements found"}
-
     return announcements
 
 
