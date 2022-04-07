@@ -3,14 +3,13 @@ import pickle
 
 from app import app
 from app.database import db
-from app.database.models.submissions import Submissions
 from app.database.models.assignments import Assignments
+from app.database.models.submissions import Submissions
 from starlette import status
-from starlette.requests import Request
 from starlette.responses import Response
 
 
-@app.get("/predict-score")
+@app.get("/students/{student_id}/stats/predict-score")
 async def predict_score(student_id: int, subject_id: int, resp: Response):
     clf = pickle.load(open("model.bin", "rb"))
 

@@ -1,1 +1,1 @@
-from app.routes.stats import scores
+from app.routes.stats import compare_scores, predict_cpi
