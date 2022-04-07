@@ -53,28 +53,18 @@ async def update_student_attendance(
     return {"result": "ok"}
 
 
-@app.get("/subjects/{subject_id}/attendance")
-async def get_subject_attendance(
-    subject_id, response: Response, Auth: AuthJWT = Depends()
-):
-    Auth.jwt_required()
-
-    attendance = db.query(Attendance).filter(Attendance.subject_id == subject_id).all()
-
-    if not attendance:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No attendance found"}
-
-    return attendance
-
-
 @app.get("/students/{student_id}/attendance")
 async def get_student_attendance(
-    student_id, response: Response, Auth: AuthJWT = Depends()
+    student_id, subject_id: int, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()
 
-    attendance = db.query(Attendance).filter(Attendance.student_id == student_id).all()
+    attendance = (
+        db.query(Attendance)
+            .filter(Attendance.student_id == student_id)
+            .filter(Attendance.subject_id == subject_id)
+            .first()
+    )
 
     if not attendance:
         response.status_code = status.HTTP_404_NOT_FOUND
