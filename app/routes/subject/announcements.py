@@ -54,7 +54,7 @@ async def post_subject_announcements(
         db.add(announcement)
         db.commit()
     except Exception as e:
-        response.status_code = status.HTTP_503_UNAVAILABLE
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"result": "fail", "reason": str(e)}
 
     return {"result": "ok"}

@@ -24,11 +24,7 @@ async def get_submitted_assignment(
             .filter(Submissions.assignment_id == assignment_id)
             .first()
     )
-
-    if not submission:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"result": "fail", "reason": "No assignment submission found"}
-
+    
     return submission
 
 
@@ -41,14 +37,14 @@ async def submit_assignment(
 
     submission = Submissions()
     submission.attachement = body.attachement
-    submission.student_id = body.student_id
+    submission.student_id = student_id
     submission.assignment_id = body.assignment_id
 
     try:
         db.add(submission)
         db.commit()
     except Exception as e:
-        response.status_code = status.HTTP_503_UNAVAILABLE
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"result": "fail", "reason": str(e)}
 
     return {"result": "ok"}

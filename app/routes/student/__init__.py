@@ -1,1 +1,1 @@
-from app.routes.student import calendar, login, subjects, timetable
+from app.routes.student import calendar, login, subjects, timetable, assignments
