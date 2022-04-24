@@ -8,19 +8,19 @@ from pydantic import BaseModel
 
 
 class RequestBody(BaseModel):
-    student_id: int
+    subject_id: int
 
 
-@app.put("/subjects/{subject_id}/attendance")
+@app.put("/students/{student_id}/attendance")
 async def update_student_attendance(
-    subject_id, body: RequestBody, response: Response, Auth: AuthJWT = Depends()
+    student_id, body: RequestBody, response: Response, Auth: AuthJWT = Depends()
 ):
     Auth.jwt_required()
 
     existing = (
         db.query(StudentSubjectMap)
-            .filter(StudentSubjectMap.subject_id == subject_id)
-            .filter(StudentSubjectMap.student_id == body.student_id)
+            .filter(StudentSubjectMap.subject_id == body.subject_id)
+            .filter(StudentSubjectMap.student_id == student_id)
             .first()
     )
 
@@ -30,8 +30,8 @@ async def update_student_attendance(
 
     attendance = (
         db.query(Attendance)
-            .filter(Attendance.subject_id == subject_id)
-            .filter(Attendance.student_id == body.student_id)
+            .filter(Attendance.subject_id == body.subject_id)
+            .filter(Attendance.student_id == student_id)
             .first()
     )
 
@@ -41,8 +41,8 @@ async def update_student_attendance(
         else:
             attendance = Attendance()
             attendance.attendance = 1
-            attendance.subject_id = subject_id
-            attendance.student_id = body.student_id
+            attendance.subject_id = body.subject_id
+            attendance.student_id = student_id
             
             db.add(attendance)
         db.commit()

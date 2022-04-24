@@ -12,7 +12,7 @@ class RequestBody(BaseModel):
     assignment_id: int
 
 
-@app.get("/student/{student_id}/submission")
+@app.get("/students/{student_id}/submission")
 async def get_submitted_assignment(
     student_id, assignment_id: int, response: Response, Auth: AuthJWT = Depends()
 ):

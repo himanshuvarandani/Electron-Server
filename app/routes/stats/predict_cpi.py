@@ -9,8 +9,8 @@ from starlette import status
 from starlette.responses import Response
 
 
-@app.get("/students/{student_id}/stats/predict-score")
-async def predict_score(student_id: int, subject_id: int, resp: Response):
+@app.get("/students/{student_id}/stats/predict-cpi")
+async def predict_cpi(student_id: int, subject_id: int, resp: Response):
     clf = pickle.load(open("model.bin", "rb"))
 
     if not hasattr(clf, "predict"):
