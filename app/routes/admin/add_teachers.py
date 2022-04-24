@@ -25,6 +25,7 @@ async def add_teachers(
             teacherInstance = Teachers()
             teacherInstance.name = teacherDetail[0]
             teacherInstance.email = teacherDetail[1]
+            teacherInstance.department_name = teacherDetail[2]
 
             # Generate a random password
             password = uuid.uuid4().hex[:12]

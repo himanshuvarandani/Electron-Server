@@ -25,6 +25,9 @@ async def add_students(
             studentInstance = Students()
             studentInstance.name = studentDetail[0]
             studentInstance.email = studentDetail[1]
+            studentInstance.faculty_no = studentDetail[2]
+            studentInstance.enroll_no = studentDetail[3]
+            studentInstance.department_name = studentDetail[4]
 
             # Generate a random password
             password = uuid.uuid4().hex[:12]

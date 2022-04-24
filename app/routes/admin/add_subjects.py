@@ -21,6 +21,7 @@ async def add_subjects(
         for subjectDetail in subjects:
             subjectInstance = Subjects()
             subjectInstance.name = subjectDetail[0]
+            subjectInstance.code = subjectDetail[1]
 
             try:
                 db.add(subjectInstance)
