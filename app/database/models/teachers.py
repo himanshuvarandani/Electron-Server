@@ -7,4 +7,5 @@ class Teachers(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(30))
     email = Column(String(30), unique=True)
+    department_name = Column(String(30), unique=True)
     password_hash = Column(String(512))
